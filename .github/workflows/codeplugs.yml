@@ -20,7 +20,7 @@ jobs:
       with:
         python-version: 3.8
     - name: Get current time
-      uses: 1466587594/get-current-time@v4
+      uses: 1466587594/get-current-time@v3
       id: current-time
       with:
         format: YYYYMMDD-A
