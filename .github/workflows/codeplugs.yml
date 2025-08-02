@@ -14,19 +14,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.8
     - name: Get current time
-      uses: 1466587594/get-current-time@v2
+      uses: 1466587594/get-current-time@v4
       id: current-time
       with:
         format: YYYYMMDD-A
         utcOffset: "-08:00"
     - name: Cache .cache
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       with:
         path: ~/.cache
         key: dzcb-cache-${{ steps.current-time.outputs.formattedTime }}
@@ -37,7 +37,7 @@ jobs:
     - name: Build Codeplugs
       run: tox
     - name: Archive Codeplugs
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: codeplugs
         path: ${{ env.OUTPUT }}
@@ -49,7 +49,7 @@ jobs:
       ASSET_PATH: /tmp/codeplugs.zip
     steps:
     - name: Download Codeplugs
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: codeplugs
         path: ${{ env.OUTPUT }}
