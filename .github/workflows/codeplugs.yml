@@ -1,3 +1,4 @@
+
 name: Build Codeplugs
 
 on:
@@ -12,11 +13,11 @@ env:
   OUTPUT: /tmp/codeplugs
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v2
       with:
         python-version: 3.8
     - name: Get current time
@@ -37,7 +38,7 @@ jobs:
     - name: Build Codeplugs
       run: tox
     - name: Archive Codeplugs
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v2
       with:
         name: codeplugs
         path: ${{ env.OUTPUT }}
@@ -49,7 +50,7 @@ jobs:
       ASSET_PATH: /tmp/codeplugs.zip
     steps:
     - name: Download Codeplugs
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v2
       with:
         name: codeplugs
         path: ${{ env.OUTPUT }}
