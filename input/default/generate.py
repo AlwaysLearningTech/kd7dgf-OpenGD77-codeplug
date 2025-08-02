@@ -24,7 +24,7 @@ CodeplugRecipe(
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
     output_anytone=True,
-    output_dmrconfig=[(cp_dir / "gd-77-default.conf")],
+    output_dmrconfig=[(cp_dir / "gd77-default.conf")],
     output_farnsworth=[(cp_dir / "example-md-uv380.json")],
     output_gb3gf=True
 ).generate(output / cp_dir.name)
