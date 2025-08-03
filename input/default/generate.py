@@ -14,7 +14,7 @@ output = Path(os.environ.get("OUTPUT") or (cp_dir / ".." / ".." / "OUTPUT"))
 CodeplugRecipe(
     source_pnwdigital=True,
     source_seattledmr=True,
-    source_default_k7abd=True,
+    source_default_k7abd=False,
     source_k7abd=[(cp_dir / "k7abd")],
     source_repeaterbook_proximity=cp_dir / "prox.csv",
     repeaterbook_states=["washington", "oregon"],
@@ -23,7 +23,7 @@ CodeplugRecipe(
     exclude=cp_dir / "exclude.csv",
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
-    output_anytone=False,
+    output_anytone=True,
     output_dmrconfig=[(cp_dir / "gd77-default.conf")],
     output_farnsworth=False,
     output_gb3gf=True

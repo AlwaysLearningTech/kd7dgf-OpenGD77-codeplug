@@ -1,25 +1,17 @@
 Zone Name,Lat,Long,Distance,Unit,Band(2m;1.25m;70cm),Use,Operational Status
-Longview WA VHF 35mi,46.13819885,-122.93800354,35,miles,2m,OPEN,On-Air
-Longview WA UHF 35mi,46.13819885,-122.93800354,35,miles,70cm,OPEN,On-Air
-Olympia WA VHF 30mi,47.03789902,-122.90100098,30,miles,2m,OPEN,On-Air
-Olympia WA UHF 30mi,47.03789902,-122.90100098,30,miles,70cm,OPEN,On-Air
-Packwood WA VHF 40mi,46.60649872,-121.67099762,40,miles,2m,OPEN,On-Air
-Packwood WA UHF 40mi,46.60649872,-121.67099762,40,miles,70cm,OPEN,On-Air
-Seattle WA VHF 45mi,47.60620117,-122.33200073,45,miles,2m,OPEN,On-Air
-Seattle WA UHF 45mi,47.60620117,-122.33200073,45,miles,70cm,OPEN,On-Air
-Burlington WA VHF 45mi,48.47570038,-122.32499695,45,miles,2m,OPEN,On-Air
-Burlington WA UHF 45mi,48.47570038,-122.32499695,45,miles,70cm,OPEN,On-Air
-Kennewick WA VHF 45mi,46.21125,-119.13723,45,miles,2m,OPEN,On-Air
-Kennewick WA UHF 45mi,46.21125,-119.13723,45,miles,70cm,OPEN,On-Air
-Spokane WA VHF 45mi,47.658779,-117.426048,45,miles,2m,OPEN,On-Air
-Spokane WA UHF 45mi,47.658779,-117.426048,45,miles,70cm,OPEN,On-Air
-Ellensburg WA VHF 45mi,46.999619,-120.548851,45,miles,2m,OPEN,On-Air
-Ellensburg WA UHF 45mi,46.999619,-120.548851,45,miles,70cm,OPEN,On-Air
-Cle Elum WA VHF 45mi,47.243279,-121.064789,45,miles,2m,OPEN,On-Air
-Cle Elum WA UHF 45mi,47.243279,-121.064789,45,miles,70cm,OPEN,On-Air
-Ritzville WA VHF 45mi,47.125832,-118.376953,45,miles,2m,OPEN,On-Air
-Ritzville WA UHF 45mi,47.125832,-118.376953,45,miles,70cm,OPEN,On-Air
-Wenatchee WA VHF 45mi,47.429829,-120.324699,45,miles,2m,OPEN,On-Air
-Wenatchee WA UHF 45mi,47.429829,-120.324699,45,miles,70cm,OPEN,On-Air
-Chewelah WA VHF 45mi,48.280891,-117.723679,45,miles,2m,OPEN,On-Air
-Chewelah WA UHF 45mi,48.280891,-117.723679,45,miles,70cm,OPEN,On-Air
+Longview WA 35mi,46.13819885,-122.93800354,35,miles,2m;1.25m;70cm,OPEN,On-Air
+Olympia WA 30mi,47.03789902,-122.90100098,30,miles,2m;1.25m;70cm,OPEN,On-Air
+Packwood WA 40mi,46.60649872,-121.67099762,40,miles,2m;1.25m;70cm,OPEN,On-Air
+Seattle WA 45mi,47.60620117,-122.33200073,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Burlington WA 45mi,48.47570038,-122.32499695,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Kennewick WA 45mi,46.21125,-119.13723,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Spokane WA 45mi,47.658779,-117.426048,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Ellensburg WA 45mi,46.999619,-120.548851,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Cle Elum WA 45mi,47.243279,-121.064789,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Ritzville WA 45mi,47.125832,-118.376953,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Wenatchee WA 45mi,47.429829,-120.324699,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Chewelah WA 45mi,48.280891,-117.723679,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Yakima WA 45mi,46.602230,-120.506088,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Portland OR 45mi,45.512230,-122.658722,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Sequim WA 45mi,48.079536,-123.101845,45,miles,2m;1.25m;70cm,OPEN,On-Air
+Bellingham WA 45mi,48.754902,-122.478119,45,miles,2m;1.25m;70cm,OPEN,On-Air
