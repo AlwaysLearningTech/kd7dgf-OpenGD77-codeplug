@@ -31,24 +31,3 @@ CodeplugRecipe(
     output_farnsworth=False,
     output_gb3gf=True
 ).generate(output / cp_dir.name)
-
-import csv
-from pathlib import Path
-
-# Define the target directory
-target_dir = Path("output") / "gb3gf" / "opengd77"
-
-# Loop through all CSV files in the directory
-for file_path in target_dir.glob("*.csv"):
-    temp_path = file_path.with_suffix(".tmp")
-
-    # Read the semicolon-delimited file
-    with open(file_path, 'r', newline='', encoding='utf-8') as infile, \
-         open(temp_path, 'w', newline='', encoding='utf-8') as outfile:
-        reader = csv.reader(infile, delimiter=';')
-        writer = csv.writer(outfile, delimiter=',')
-        for row in reader:
-            writer.writerow(row)
-
-    # Replace original file with the updated one
-    temp_path.replace(file_path)
