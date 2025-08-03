@@ -7,11 +7,8 @@ from pathlib import Path
 import os
 
 from dzcb.recipe import CodeplugRecipe
-from datetime import datetime
 
-# Get today's date in YYYY-MM-DD format
-today_date = datetime.today().strftime('%Y-%m-%d')
-cp_dir = today_date
+cp_dir = Path(__file__).parent
 output = Path(os.environ.get("OUTPUT") or (cp_dir / ".." / ".." / "OUTPUT"))
 
 CodeplugRecipe(
