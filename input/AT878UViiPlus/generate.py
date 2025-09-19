@@ -26,5 +26,5 @@ CodeplugRecipe(
     output_anytone=True,
     output_dmrconfig=[(cp_dir / "d878uv-default.conf")],
     output_farnsworth=False,
-    output_gb3gf=True
+    output_gb3gf=False
 ).generate(output / cp_dir.name)
