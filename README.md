@@ -1,89 +1,161 @@
-# example-codeplug
+# kd7dgf-OpenGD77-codeplug
 
-Generate DMR codeplugs from a variety of online sources using
-[dzcb](https://github.com/mycodeplug/dzcb).
+**Multi-radio DMR codeplug generator for Western Washington/Oregon**
+
+Generate customized DMR codeplugs for three radio variants from a variety of online sources using
+[dzcb (DMR Zone Channel Builder)](https://github.com/mycodeplug/dzcb).
+
+This project extends the upstream [example-codeplug](https://github.com/mycodeplug/example-codeplug) to support simultaneous generation of multiple radio formats with radio-specific optimizations.
+
+## Supported Radios
+
+This project generates codepl ugs for three radio variants:
+
+### AT-D578UV_III_Plus
+- **Output Format**: Anytone CPS (Windows-only import)
+- **CPS Version**: 1.11
+- **Features**: Analog, Digital DMR repeaters, GMRS, simplex
+- **Status**: ✅ Fully supported (CPS import only, dmrconfig not supported upstream)
+
+### AT-D878UV_II_Plus
+- **Output Formats**: Anytone CPS + dmrconfig
+- **CPS Version**: 1.21 (Anytone), OpenRTX (dmrconfig)
+- **Features**: Analog, Digital DMR repeaters, GMRS, simplex, advanced features
+- **Status**: ✅ Fully supported (dual-format output)
+
+### OpenGD77
+- **Output Format**: Farnsworth (editcp JSON)
+- **Import Tool**: [editcp](https://www.farnsworth.org/dale/codeplug/editcp/)
+- **Features**: Analog, Digital DMR repeaters, GMRS, simplex
+- **Status**: ✅ Fully supported
 
 ## Data Sources
 
-### [PNWdigital.net](http://PNWDigital.net)
+**Active Sources:**
+- **PNWDigital**: Live repeater network (https://pnwdigital.net)
+- **SeattleDMR**: Live repeater network (https://seattledmr.org)
+- **Local K7ABD Files**: Manual zone/channel definitions
 
-**Before using this network, please read the [quick start](http://www.pnwdigital.net/quick-start.html)**
-
-### [SeattleDMR](https://seattledmr.org/)
-
-**Before using these repeaters, please read the [website](https://seattledmr.org)**
-
-### Repeaterbook Proximity
-
-### [Local](https://github.com/mycodeplug/dzcb/blob/main/src/dzcb/data/k7abd/Digital-Repeaters__Local.csv)
-
-Information on these Western Washington standalone DMR repeaters was
-retrieved from Repeaterbook and respective websites in 2020 October.
-
-### Simplex, GMRS, etc
-
-Some common [Digital](https://github.com/mycodeplug/dzcb/blob/main/src/dzcb/data/k7abd/Digital-Others__Simplex.csv)
-and [Analog](https://github.com/mycodeplug/dzcb/blob/main/src/dzcb/data/k7abd/Analog__Simplex.csv) simplex frequencies,
-and [GMRS/FRS and MURS channels](https://github.com/mycodeplug/dzcb/blob/main/src/dzcb/data/k7abd/Analog__Unlicensed.csv) are included.
+**Disabled Sources:**
+- **Repeaterbook Proximity**: Disabled due to upstream issue with CSV header generation (see Known Issues)
 
 ## Editing
 
 Create / edit codeplug source files under [`/input`](/input).
 
-If multiple subdirectories exist under `/input`, then multiple
-codeplugs will be generated.
+This project uses **multiple subdirectories** under `/input` to generate **simultaneous codepl ugs for three radios**:
+- `input/AT-D578UV_III_Plus/` → Anytone CPS format only
+- `input/AT-D878UV_II_Plus/` → Anytone CPS + dmrconfig formats
+- `input/OpenGD77/` → Farnsworth/editcp JSON format
 
-The [`default`](./input/default) directory contains the example codeplug
-input files along with 2 scripts:
+Each subdirectory contains:
+- [`generate.py`](./input/AT-D878UV_II_Plus/generate.py): Python script that builds the codeplug using dzcb API
+- [`k7abd/`](./input/AT-D878UV_II_Plus/k7abd/): Zone/channel definitions in K7ABD CSV format
+- [`order.csv`](./input/AT-D878UV_II_Plus/order.csv): Preferred zone/channel/contact order
+- [`exclude.csv`](./input/AT-D878UV_II_Plus/exclude.csv): Zone/channel/contact exclusions
+- [`replacements.csv`](./input/AT-D878UV_II_Plus/replacements.csv): Object name replacements (regex)
+- [`scanlists.json`](./input/AT-D878UV_II_Plus/scanlists.json): Additional scanlists
+- Radio-specific config template (e.g., `d878uv-default.conf` for dmrconfig)
 
-  * [`generate.sh`](./input/default/generate.sh) builds the codeplug with a
-    standard bash shell command.
-  * [`generate.py`](./input/default/generate.py) builds the same codeplug
-    using python code.
-
-Derivative codeplugs don't need to include both scripts. Use the format
-that is most familiar. While the sample scripts show identical functionality,
-the python code could be extended to hack at the generation process itself.
-
-### See [dzcb README.md](https://github.com/mycodeplug/dzcb#dzcb) for more information on input files and formats.
+### See [dzcb README.md](https://github.com/mycodeplug/dzcb#dzcb) for more information on input file formats.
 
 ## Generating
 
-See [WALKTHROUGH](https://github.com/mycodeplug/dzcb/blob/main/doc/WALKTHROUGH.md#example-codeplug-walkthough)
-for step-by-step instructions.
+### Local Build
 
-### Github Actions
+```bash
+# Install dependencies
+pip install tox
+
+# Build all three radio variants
+tox
+
+# Or run directly
+python3 input/generate_all.py
+```
+
+Generated codepl ugs will be in `OUTPUT/` subdirectories organized by radio:
+- `OUTPUT/AT-D578UV_III_Plus/anytone/` → Anytone CPS files
+- `OUTPUT/AT-D878UV_II_Plus/anytone/` → Anytone CPS files
+- `OUTPUT/AT-D878UV_II_Plus/dmrconfig/` → dmrconfig .conf file
+- `OUTPUT/OpenGD77/editcp/` → Farnsworth JSON files
+
+### GitHub Actions
 
 * [Fork this repo](../../fork)
   * In the newly forked repo, click the ["Actions" tab](../../actions) and
     enable Github Actions for your fork.
-* customize codeplug input files in [`/input/default`](./input/default)
-  * [`example-md-uv380.json`](./input/default/example-md-uv380.json#L189-L193):
-    set your Radio ID and Radio Name
-    * Copy templates from
-      [default-tyt-md380](https://github.com/mycodeplug/dzcb/blob/main/codeplug/default-tyt-md380)
-      for monoband variants.
-  * [`example-d878uv.conf`](./input/default/example-d878uv.conf):
-    set your Radio ID and Radio Name
-    * See README and templates in
-      [dmrconfig](https://github.com/mycodeplug/dzcb/blob/main/src/dzcb/data/dmrconfig)
-      for more information and other radio types.
-  * [`k7abd`](./input/default/k7abd): manually defined zones in
-    K7ABD anytone-config-builder format. See N7EKB's
-    [`cps-import-builder` reference data files](https://github.com/n7ekb/cps-import-builder/tree/main/reference_data_files/N7EKB_shared_files)
-    for more examples.
-  * [`order.csv`](./input/default/order.csv): preferred zone, contact, channel order
-  * [`exclude.csv`](./input/default/exclude.csv): zone, contact, channel exclude
-  * [`replacements.csv`](./input/default/replacements.csv): object name replacements (regex)
-  * [`scanlists.json`](./input/default/scanlists.json): additional scanlists
-  * [`generate.py`](./input/default/generate.py): options passed to `dzcb` (whether
-    to include PNWDigital, SeattleDMR, default files, etc)
-* [`prox.csv`](./input/default/prox.csv): customize points of
-    interest, distances, and desired bands
-* Github [`codeplugs`](.github/workflows/codeplugs.yml) workflow
-  will automatically build all codeplugs in the [`input`](./input) directory.
+* Customize codeplug input files in [`/input`](./input/) for each radio variant:
+  * Update zone/channel definitions in `k7abd/` subdirectories
+  * Adjust `order.csv`, `exclude.csv`, `replacements.csv` as needed
+  * Modify radio-specific config templates (`.conf` or `.json` files) with your Radio ID/Name
+  * Update `scanlists.json` for custom scan lists
+* Github [`codeplugs` workflow](.github/workflows/codeplugs.yml)
+  will automatically build all three radio codepl ugs when you push to main
 * When a [Release](../../releases) is published, the generated
-  codeplugs will be hosted publicly with a stable URL.
+  codepl ugs will be hosted publicly with stable URLs
+
+### Requirements (Local Build)
+
+* Linux, macOS, or Windows
+* Python 3.8 or later
+* [tox](https://tox.readthedocs.io/en/latest/)
+
+See [dzcb WALKTHROUGH](https://github.com/mycodeplug/dzcb/blob/main/doc/WALKTHROUGH.md) for step-by-step instructions.
+
+## Known Issues
+
+### Repeaterbook Proximity Disabled
+
+The upstream dzcb 0.3.10 has a bug where Analog CSV files generated from Repeaterbook proximity searches are missing the required "Zone" column header, causing `KeyError: 'Zone'` during parsing.
+
+**Workaround**: Repeaterbook proximity is disabled in all `generate.py` files. You still get live data from PNWDigital and SeattleDMR.
+
+**Status**: Waiting for dzcb >= 0.3.11 to resolve upstream issue. See [dzcb GitHub issues](https://github.com/mycodeplug/dzcb/issues).
+
+### AT-D578UV dmrconfig Support
+
+The upstream dmrconfig tool doesn't recognize the AT-D578UV radio model.
+
+**Workaround**: AT-D578UV codepl ugs are generated in Anytone CPS format only. Import through Windows CPS software.
+
+## Best Practices
+
+### Editing CSV Files
+
+⚠️ **Important**: Always use **UTF-8 encoding WITHOUT BOM** when saving CSV files:
+
+- **VS Code**: File → Save with Encoding → UTF-8
+- **Excel**: Save As → CSV UTF-8
+- **LibreOffice**: Tools → Options → Load/Save → Default file format
+
+Editors like Notepad++ and Sublime Text add a UTF-8 BOM by default, which breaks dzcb's CSV parsing.
+
+### Zone and Channel Naming
+
+- Zone names **must be unique** across all CSV files
+- Channel names **can be identical** in different zones
+- Keep names under 20 characters for compatibility with all radio models
+
+### Testing
+
+Before pushing to production:
+
+```bash
+# Build locally
+python3 input/generate_all.py
+
+# Check for errors in logs
+tail -20 OUTPUT/*/dzcb.*.log
+
+# Verify all three radios produced output
+ls OUTPUT/AT-D578UV_III_Plus/anytone/
+ls OUTPUT/AT-D878UV_II_Plus/anytone/
+ls OUTPUT/AT-D878UV_II_Plus/dmrconfig/
+ls OUTPUT/OpenGD77/editcp/
+```
+
+Then import into CPS/dmrconfig/editcp to validate.
 
 ### Manual
 
