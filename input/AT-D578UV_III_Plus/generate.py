@@ -24,7 +24,7 @@ CodeplugRecipe(
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
     output_anytone=True,
-    output_dmrconfig=False,  # DEBUG: Disabled dmrconfig due to radio name issue
+    output_dmrconfig=False,  # AT-D578UV not supported by dmrconfig upstream
     output_farnsworth=False,
     output_gb3gf=False
 ).generate(output / cp_dir.name)

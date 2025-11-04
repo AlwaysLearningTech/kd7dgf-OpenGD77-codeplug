@@ -16,15 +16,15 @@ CodeplugRecipe(
     source_seattledmr=True,
     source_default_k7abd=False,
     source_k7abd=[(cp_dir / "k7abd")],
-    source_repeaterbook_proximity=cp_dir / "prox.csv",
+    source_repeaterbook_proximity=None,  # Disabled due to upstream issues
     repeaterbook_states=["washington", "oregon"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     scanlists_json=cp_dir / "scanlists.json",
     exclude=cp_dir / "exclude.csv",
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
-    output_anytone=True,
-    output_dmrconfig=[(cp_dir / "d878uv-default.conf")],
-    output_farnsworth=False,
+    output_anytone=False,
+    output_dmrconfig=False,
+    output_farnsworth=True,
     output_gb3gf=False
 ).generate(output / cp_dir.name)
