@@ -24,10 +24,12 @@ This project generates codeplugs for three radio variants:
 - **Status**: ✅ Fully supported (dual-format output)
 
 ### OpenGD77
-- **Output Formats**: dmrconfig + GB3GF CSV
-- **Import Tools**: [dmrconfig](https://github.com/OpenRTX/dmrconfig) (Linux) or [GB3GF CSV Tool](http://www.gb3gf.co.uk/downloads.html)
-- **Features**: Analog, Digital DMR repeaters, GMRS, simplex
-- **Status**: ✅ Fully supported (dual-format output)
+- **Output Formats**: dmrconfig (recommended) + GB3GF CSV (experimental)
+- **Import Tools**: 
+  - [dmrconfig](https://github.com/OpenRTX/dmrconfig) (Linux/Mac, fully supported)
+  - GB3GF CSV: ⚠️ **Currently incompatible** - Format mismatch with OpenGD77's native CSV import. See [PR #93](https://github.com/mycodeplug/dzcb/pull/93) for upstream fix in progress.
+- **Features**: Analog, Digital DMR repeaters, GMRS, simplex, GPS coordinates (in progress)
+- **Status**: ✅ dmrconfig fully supported | ⏳ GB3GF CSV format pending upstream fix
 
 ## Data Sources
 
@@ -111,6 +113,14 @@ See [dzcb WALKTHROUGH](https://github.com/mycodeplug/dzcb/blob/main/doc/WALKTHRO
 The upstream dzcb 0.3.10 has a bug where Analog CSV files generated from Repeaterbook proximity searches are missing the required "Zone" column header, causing `KeyError: 'Zone'` during parsing.
 
 **Workaround**: Repeaterbook proximity is disabled in all `generate.py` files. You still get live data from PNWDigital and SeattleDMR.
+
+### OpenGD77 GB3GF CSV Format
+
+OpenGD77 now has native CSV import support built into the CPS, but the current dzcb GB3GF output format is **incompatible** with OpenGD77's import expectations.
+
+**Status**: A fix for the CSV format and GPS coordinate support is in progress at [PR #93](https://github.com/mycodeplug/dzcb/pull/93).
+
+**Workaround**: Use the **dmrconfig output** for OpenGD77 on Linux/Mac. The GB3GF CSV export is not currently usable for OpenGD77 until the upstream format fix is implemented.
 
 **Status**: Waiting for dzcb >= 0.3.11 to resolve upstream issue. See [dzcb GitHub issues](https://github.com/mycodeplug/dzcb/issues).
 

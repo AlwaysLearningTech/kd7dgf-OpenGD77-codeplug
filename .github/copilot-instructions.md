@@ -277,7 +277,7 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 - Monitor dzcb releases for fix in >= 0.3.11
 - Test and re-enable when upstream resolves
 
-### 2. AT-D578UV dmrconfig Not Supported
+### 3. AT-D578UV dmrconfig Not Supported
 
 **Status**: ℹ️ Upstream limitation
 
@@ -289,7 +289,22 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 - File issue with OpenRTX/dmrconfig if AT-D578UV support is needed
 - Until then, users must import via Anytone CPS software (Windows)
 
-### 3. GitHub Actions Cache Key
+### 4. OpenGD77 GB3GF CSV Format Incompatibility
+
+**Status**: ⚠️ Format mismatch
+
+**Issue**: OpenGD77 now has native CSV import support, but the current dzcb GB3GF output format doesn't match OpenGD77's import requirements. Additionally, GPS coordinate support is incomplete.
+
+**Symptoms**: GB3GF CSV files cannot be imported into OpenGD77 CPS. Missing or incorrect field formats.
+
+**Workaround**: Use dmrconfig output for OpenGD77 (Linux/Mac) - fully functional and recommended
+
+**Resolution Path**: 
+- Monitor [PR #93](https://github.com/mycodeplug/dzcb/pull/93) for upstream format fix
+- GPS coordinate support also pending in that PR
+- When merged, GB3GF CSV will be usable for OpenGD77
+
+### 5. GitHub Actions Cache Key
 
 **Current**: `dzcb-cache-YYYYMMDD-AM` (once per morning)
 
