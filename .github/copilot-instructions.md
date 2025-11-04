@@ -263,19 +263,17 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 
 ## Known Issues and Limitations
 
-### 1. Repeaterbook Proximity Disabled
+### 1. Repeaterbook Proximity (Re-enabled)
 
-**Status**: ⚠️ Upstream bug
+**Status**: ✅ Fixed and re-enabled
 
-**Issue**: dzcb 0.3.10 `zones_to_k7abd()` generates Analog CSV files without Zone column headers.
+**Previous Issue**: dzcb 0.3.10 `zones_to_k7abd()` generated Analog CSV files without Zone column headers, causing `KeyError: 'Zone'` during parsing.
 
-**Symptoms**: `KeyError: 'Zone'` during codeplug generation
+**Root Cause**: UTF-8 Byte Order Mark (BOM) in K7ABD CSV files prevented proper header recognition.
 
-**Workaround**: Repeaterbook data disabled; use PNWDigital/SeattleDMR instead
+**Fix Applied**: Removed UTF-8 BOM from all K7ABD CSV files. Repeaterbook proximity is now re-enabled with proximity points defined in `prox.csv` for Seattle and Tacoma areas.
 
-**Resolution Path**: 
-- Monitor dzcb releases for fix in >= 0.3.11
-- Test and re-enable when upstream resolves
+**Current Configuration**: All three radios include repeaterbook data from Washington and Oregon within 50-mile radius of defined proximity points.
 
 ### 3. AT-D578UV dmrconfig Not Supported
 
@@ -297,7 +295,9 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 
 **Symptoms**: GB3GF CSV files cannot be imported into OpenGD77 CPS. Missing or incorrect field formats.
 
-**Workaround**: Use dmrconfig output for OpenGD77 (Linux/Mac) - fully functional and recommended
+**Workarounds**: 
+1. Use dmrconfig output for OpenGD77 (Linux/Mac) - fully functional and recommended
+2. Copy/paste rows from GB3GF CSV files directly into OpenGD77 CPS as a manual workaround
 
 **Resolution Path**: 
 - Monitor [PR #93](https://github.com/mycodeplug/dzcb/pull/93) for upstream format fix

@@ -108,11 +108,13 @@ See [dzcb WALKTHROUGH](https://github.com/mycodeplug/dzcb/blob/main/doc/WALKTHRO
 
 ## Known Issues
 
-### Repeaterbook Proximity Disabled
+### Repeaterbook Proximity (Re-enabled)
 
-The upstream dzcb 0.3.10 has a bug where Analog CSV files generated from Repeaterbook proximity searches are missing the required "Zone" column header, causing `KeyError: 'Zone'` during parsing.
+Previously, the upstream dzcb 0.3.10 had a bug where Analog CSV files generated from Repeaterbook proximity searches were missing the required "Zone" column header, causing `KeyError: 'Zone'` during parsing.
 
-**Workaround**: Repeaterbook proximity is disabled in all `generate.py` files. You still get live data from PNWDigital and SeattleDMR.
+**Status**: ✅ **Fixed** - The root cause was UTF-8 Byte Order Mark (BOM) in K7ABD CSV files. After removing the BOM, repeaterbook proximity has been re-enabled.
+
+**Current Configuration**: All three radios now include repeaterbook data from Washington and Oregon within 50-mile radius of defined proximity points (Seattle, Tacoma).
 
 ### OpenGD77 GB3GF CSV Format
 
@@ -120,9 +122,9 @@ OpenGD77 now has native CSV import support built into the CPS, but the current d
 
 **Status**: A fix for the CSV format and GPS coordinate support is in progress at [PR #93](https://github.com/mycodeplug/dzcb/pull/93).
 
-**Workaround**: Use the **dmrconfig output** for OpenGD77 on Linux/Mac. The GB3GF CSV export is not currently usable for OpenGD77 until the upstream format fix is implemented.
-
-**Status**: Waiting for dzcb >= 0.3.11 to resolve upstream issue. See [dzcb GitHub issues](https://github.com/mycodeplug/dzcb/issues).
+**Workarounds**: 
+1. Use the **dmrconfig output** for OpenGD77 on Linux/Mac (fully supported, recommended)
+2. Copy/paste rows from the GB3GF CSV files directly into OpenGD77 CPS as a manual workaround until the format is fixed
 
 ### AT-D578UV dmrconfig Support
 

@@ -16,7 +16,10 @@ CodeplugRecipe(
     source_seattledmr=True,
     source_default_k7abd=False,
     source_k7abd=[(cp_dir / "k7abd")],
-    source_repeaterbook_proximity=None,
+    source_repeaterbook_proximity=[
+        {"latitude": 47.6062, "longitude": -122.3321, "distance": 50},  # Seattle
+        {"latitude": 47.2529, "longitude": -122.4443, "distance": 50},  # Tacoma
+    ],
     repeaterbook_states=["washington", "oregon"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     scanlists_json=cp_dir / "scanlists.json",
