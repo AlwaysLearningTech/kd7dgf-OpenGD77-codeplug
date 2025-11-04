@@ -16,7 +16,7 @@ CodeplugRecipe(
     source_seattledmr=True,
     source_default_k7abd=False,
     source_k7abd=[(cp_dir / "k7abd")],
-    source_repeaterbook_proximity=cp_dir / "prox.csv",
+    source_repeaterbook_proximity=None,  # Temporarily disabled for debugging
     repeaterbook_states=["washington", "oregon"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     scanlists_json=cp_dir / "scanlists.json",
