@@ -1,4 +1,4 @@
-﻿Zone,Channel Name,Bandwidth,Power,RX Freq,TX Freq,CTCSS Decode,CTCSS Encode,TX Prohibit
+Zone,Channel Name,Bandwidth,Power,RX Freq,TX Freq,CTCSS Decode,CTCSS Encode,TX Prohibit
 ACS - VHF,V01PSR-PSRG,25K,High,146.9600,146.3600,103.5,103.5,Off
 ACS - VHF,V02PSO-PSRG Outp,25K,High,146.9600,146.9600,Off,103.5,Off
 ACS - VHF,V03DXC-WW DX Clu,25K,High,147.0000,146.4000,103.5,103.5,Off

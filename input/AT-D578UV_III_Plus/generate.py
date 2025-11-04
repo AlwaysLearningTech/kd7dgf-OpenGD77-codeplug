@@ -16,7 +16,7 @@ CodeplugRecipe(
     source_seattledmr=True,
     source_default_k7abd=False,
     source_k7abd=[(cp_dir / "k7abd")],
-    source_repeaterbook_proximity=None,  # Temporarily disabled for debugging
+    source_repeaterbook_proximity=None,
     repeaterbook_states=["washington", "oregon"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     scanlists_json=cp_dir / "scanlists.json",
@@ -24,7 +24,7 @@ CodeplugRecipe(
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
     output_anytone=True,
-    output_dmrconfig=[(cp_dir / "d578uv-default.conf")],
+    output_dmrconfig=False,  # DEBUG: Disabled dmrconfig due to radio name issue
     output_farnsworth=False,
     output_gb3gf=False
 ).generate(output / cp_dir.name)
