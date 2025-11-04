@@ -27,7 +27,7 @@ kd7dgf-OpenGD77-codeplug/
 │   │   ├── order.csv                  # Channel/zone ordering
 │   │   ├── replacements.csv           # Name replacements (regex)
 │   │   ├── scanlists.json             # Custom scanlists
-│   │   └── prox.csv                   # Repeaterbook proximity search (disabled)
+│   │   └── prox.csv                   # Repeaterbook proximity zones
 │   ├── AT-D878UV_II_Plus/             # Anytone 878 (CPS 1.21) - Anytone + dmrconfig
 │   │   ├── generate.py                # Python codeplug generator
 │   │   ├── d878uv-default.conf        # dmrconfig template
@@ -36,7 +36,7 @@ kd7dgf-OpenGD77-codeplug/
 │   │   ├── order.csv                  # Channel/zone ordering
 │   │   ├── replacements.csv           # Name replacements (regex)
 │   │   ├── scanlists.json             # Custom scanlists
-│   │   └── prox.csv                   # Repeaterbook proximity search (disabled)
+│   │   └── prox.csv                   # Repeaterbook proximity zones
    └── OpenGD77/                      # OpenGD77 radio - dmrconfig + GB3GF output
        ├── generate.py                # Python codeplug generator
        ├── gd77-default.conf          # dmrconfig template
@@ -45,7 +45,7 @@ kd7dgf-OpenGD77-codeplug/
 │       ├── order.csv                  # Channel/zone ordering
 │       ├── replacements.csv           # Name replacements (regex)
 │       ├── scanlists.json             # Custom scanlists
-│       └── prox.csv                   # Repeaterbook proximity search (disabled)
+│       └── prox.csv                   # Repeaterbook proximity zones
 ├── OUTPUT/                             # Build output (generated)
 │   ├── AT-D578UV_III_Plus/
 │   │   └── anytone/                   # Anytone CPS CSV files
@@ -68,7 +68,7 @@ dzcb.CodeplugRecipe()
   │   ├── Local K7ABD CSV files (zones, channels, talkgroups)
   │   ├── PNWDigital network (live repeater data)
   │   ├── SeattleDMR network (live repeater data)
-  │   └── Repeaterbook Proximity (disabled - see Known Issues)
+  │   └── Repeaterbook Proximity (14 zones with configurable radius)
   │
   ├── Processing:
   │   ├── Merge zones from all sources
@@ -117,21 +117,6 @@ Each `generate.py` in each subdirectory is independently executed by `input/gene
 - AT-D578UV: `output_anytone=True`, `output_dmrconfig=False` (not supported upstream)
 - AT-D878UV: `output_anytone=True`, `output_dmrconfig=True` (fully supported)
 - OpenGD77: `output_dmrconfig=True`, `output_gb3gf=True` (dual-format support)
-
-### Repeaterbook Proximity (Re-Enabled)
-
-**Upstream**: dzcb supports `--repeaterbook-proximity-csv` for live repeater data within distance of points of interest.
-
-**Status**: ✅ **FIXED AND RE-ENABLED** - The UTF-8 BOM issue in K7ABD CSV files has been resolved.
-
-**Customization**: Set `source_repeaterbook_proximity=cp_dir / "prox.csv"` in all `generate.py` files to enable dynamic repeaterbook-based zone generation.
-
-**prox.csv Format**: Each variant includes a `prox.csv` file with proximity search zones:
-- Columns: `Zone Name, Lat, Long, Distance (miles), Band, Use, Operational Status`
-- 14 predefined zones covering Washington and Oregon (Seattle, Tacoma, Spokane, Portland, etc.)
-- dzcb automatically fetches repeaterbook data for repeaters within specified distance of each zone's coordinates
-
-**Impact**: Full live repeaterbook data integrated with PNWDigital and SeattleDMR live data, creating comprehensive dynamic zones.
 
 ## Development Workflow
 
@@ -191,7 +176,7 @@ CodeplugRecipe(
     # Output Formats (radio-specific)
     output_anytone=True,                 # Generate Anytone CPS format
     output_dmrconfig=False,              # Generate dmrconfig format (radio-dependent)
-    output_farnsworth=False,             # NOT used (deprecated - was Farnsworth/editcp)
+    output_farnsworth=False,             # Legacy parameter (not used, always False)
     output_gb3gf=False                   # Generate GB3GF format
 ).generate(output / cp_dir.name)
 ```
@@ -302,18 +287,13 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 
 **Workarounds**: 
 1. Use dmrconfig output for OpenGD77 (Linux/Mac) - fully functional and recommended
-2. Copy/paste rows from GB3GF CSV files directly into OpenGD77 CPS as a manual workaround
-
-**Resolution Path**: 
-- Monitor [PR #93](https://github.com/mycodeplug/dzcb/pull/93) for upstream format fix
-- GPS coordinate support also pending in that PR
-- When merged, GB3GF CSV will be usable for OpenGD77
+2. Copy/paste rows from GB3GF CSV files directly into OpenGD77 CPS as a temporary workaround
 
 ### 5. GitHub Actions Cache Key
 
-**Current**: `dzcb-cache-YYYYMMDD-AM` (once per morning)
+**Current**: `dzcb-cache-YYYYMMDD-A` (UTC-8 offset, updated daily)
 
-**Note**: Cache keys use UTC time zone; adjust if time-based keying causes issues
+**Note**: Cache is automatically invalidated each day; key format uses `YYYYMMDD-A` where A is a literal character
 
 ## Common Workflow Tasks
 

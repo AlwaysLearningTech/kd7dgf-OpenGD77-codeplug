@@ -27,19 +27,17 @@ This project generates codeplugs for three radio variants:
 - **Output Formats**: dmrconfig (recommended) + GB3GF CSV (experimental)
 - **Import Tools**: 
   - [dmrconfig](https://github.com/OpenRTX/dmrconfig) (Linux/Mac, fully supported)
-  - GB3GF CSV: ⚠️ **Currently incompatible** - Format mismatch with OpenGD77's native CSV import. See [PR #93](https://github.com/mycodeplug/dzcb/pull/93) for upstream fix in progress.
+  - GB3GF CSV: ⚠️ **Currently incompatible** - Format mismatch with OpenGD77's native CSV import
 - **Features**: Analog, Digital DMR repeaters, GMRS, simplex, GPS coordinates (in progress)
-- **Status**: ✅ dmrconfig fully supported | ⏳ GB3GF CSV format pending upstream fix
+- **Status**: ✅ dmrconfig fully supported | ⏳ GB3GF CSV format work in progress
 
 ## Data Sources
 
 **Active Sources:**
 - **PNWDigital**: Live repeater network (https://pnwdigital.net)
 - **SeattleDMR**: Live repeater network (https://seattledmr.org)
+- **Repeaterbook Proximity**: Live repeater data from defined proximity zones (14 zones covering Washington/Oregon)
 - **Local K7ABD Files**: Manual zone/channel definitions
-
-**Disabled Sources:**
-- **Repeaterbook Proximity**: Disabled due to upstream issue with CSV header generation (see Known Issues)
 
 ## Editing
 
@@ -120,11 +118,9 @@ Previously, the upstream dzcb 0.3.10 had a bug where Analog CSV files generated 
 
 OpenGD77 now has native CSV import support built into the CPS, but the current dzcb GB3GF output format is **incompatible** with OpenGD77's import expectations.
 
-**Status**: A fix for the CSV format and GPS coordinate support is in progress at [PR #93](https://github.com/mycodeplug/dzcb/pull/93).
-
 **Workarounds**: 
 1. Use the **dmrconfig output** for OpenGD77 on Linux/Mac (fully supported, recommended)
-2. Copy/paste rows from the GB3GF CSV files directly into OpenGD77 CPS as a manual workaround until the format is fixed
+2. Copy/paste rows from the GB3GF CSV files directly into OpenGD77 CPS as a temporary workaround
 
 ### AT-D578UV dmrconfig Support
 
@@ -170,26 +166,3 @@ ls OUTPUT/OpenGD77/gb3gf/
 ```
 
 Then import into CPS/dmrconfig or GB3GF tool to validate.
-
-### Manual
-
-#### Requirements
-
-* linux, macOS, windows
-* python 3.6+ (python 3.8 recommended)
-* [tox](https://tox.readthedocs.io/en/latest/)
-
-#### Build
-
-To output to a specific directory, set the `OUTPUT` environment variable.
-
-```
-pip install tox
-tox
-```
-
-To run the `generate.sh` shell scripts
-
-```
-tox -e shell
-```
