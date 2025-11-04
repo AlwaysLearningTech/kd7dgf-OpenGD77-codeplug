@@ -118,15 +118,20 @@ Each `generate.py` in each subdirectory is independently executed by `input/gene
 - AT-D878UV: `output_anytone=True`, `output_dmrconfig=True` (fully supported)
 - OpenGD77: `output_dmrconfig=True`, `output_gb3gf=True` (dual-format support)
 
-### Repeaterbook Proximity (Disabled)
+### Repeaterbook Proximity (Re-Enabled)
 
 **Upstream**: dzcb supports `--repeaterbook-proximity-csv` for live repeater data within distance of points of interest.
 
-**Issue**: dzcb 0.3.10 has a bug where `zones_to_k7abd()` generates Analog CSV files without proper Zone column headers, causing `KeyError: 'Zone'`.
+**Status**: ✅ **FIXED AND RE-ENABLED** - The UTF-8 BOM issue in K7ABD CSV files has been resolved.
 
-**Customization**: Set `source_repeaterbook_proximity=None` in all `generate.py` files to disable this feature until upstream fixes the issue.
+**Customization**: Set `source_repeaterbook_proximity=cp_dir / "prox.csv"` in all `generate.py` files to enable dynamic repeaterbook-based zone generation.
 
-**Impact**: Users still get PNWDigital and SeattleDMR live data; repeaterbook proximity-based dynamic zones are unavailable.
+**prox.csv Format**: Each variant includes a `prox.csv` file with proximity search zones:
+- Columns: `Zone Name, Lat, Long, Distance (miles), Band, Use, Operational Status`
+- 14 predefined zones covering Washington and Oregon (Seattle, Tacoma, Spokane, Portland, etc.)
+- dzcb automatically fetches repeaterbook data for repeaters within specified distance of each zone's coordinates
+
+**Impact**: Full live repeaterbook data integrated with PNWDigital and SeattleDMR live data, creating comprehensive dynamic zones.
 
 ## Development Workflow
 
@@ -171,9 +176,9 @@ CodeplugRecipe(
     source_seattledmr=True,              # Include live SeattleDMR repeaters
     source_default_k7abd=False,          # Include dzcb default simplex/unlicensed
     source_k7abd=[(cp_dir / "k7abd")],   # Local K7ABD CSV files
-    source_repeaterbook_proximity=None,  # Disabled due to upstream bug
+    source_repeaterbook_proximity=cp_dir / "prox.csv",  # Repeaterbook proximity zones
     
-    # Repeaterbook Configuration (if re-enabling)
+    # Repeaterbook Configuration (if customizing)
     repeaterbook_states=["washington", "oregon"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     
