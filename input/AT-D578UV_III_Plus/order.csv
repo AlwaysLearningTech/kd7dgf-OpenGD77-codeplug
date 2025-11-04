@@ -1,0 +1,12 @@
+zones,contacts,channels
+ACS - UHF,,
+ACS - VHF,,
+ACS - VHF 1.25m,,
+ACS - Data
+ACS - Narrow Band,,
+ACS - GMRS,,H3-CAPH
+GMRS / FRS,,
+Seattle/Central;SCE,Seattle 1,
+Seattle/North;LFP,Seattle 1,
+Seattle/West;SWE,Seattle 1,
+Seattle/Metro;SEM,,
