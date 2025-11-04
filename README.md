@@ -9,7 +9,7 @@ This project extends the upstream [example-codeplug](https://github.com/mycodepl
 
 ## Supported Radios
 
-This project generates codepl ugs for three radio variants:
+This project generates codeplugs for three radio variants:
 
 ### AT-D578UV_III_Plus
 - **Output Format**: Anytone CPS (Windows-only import)
@@ -24,10 +24,10 @@ This project generates codepl ugs for three radio variants:
 - **Status**: ✅ Fully supported (dual-format output)
 
 ### OpenGD77
-- **Output Format**: Farnsworth (editcp JSON)
-- **Import Tool**: [editcp](https://www.farnsworth.org/dale/codeplug/editcp/)
+- **Output Formats**: dmrconfig + GB3GF CSV
+- **Import Tools**: [dmrconfig](https://github.com/OpenRTX/dmrconfig) (Linux) or [GB3GF CSV Tool](http://www.gb3gf.co.uk/downloads.html)
 - **Features**: Analog, Digital DMR repeaters, GMRS, simplex
-- **Status**: ✅ Fully supported
+- **Status**: ✅ Fully supported (dual-format output)
 
 ## Data Sources
 
@@ -43,10 +43,10 @@ This project generates codepl ugs for three radio variants:
 
 Create / edit codeplug source files under [`/input`](/input).
 
-This project uses **multiple subdirectories** under `/input` to generate **simultaneous codepl ugs for three radios**:
+This project uses **multiple subdirectories** under `/input` to generate **simultaneous codeplugs for three radios**:
 - `input/AT-D578UV_III_Plus/` → Anytone CPS format only
 - `input/AT-D878UV_II_Plus/` → Anytone CPS + dmrconfig formats
-- `input/OpenGD77/` → Farnsworth/editcp JSON format
+- `input/OpenGD77/` → dmrconfig + GB3GF formats
 
 Each subdirectory contains:
 - [`generate.py`](./input/AT-D878UV_II_Plus/generate.py): Python script that builds the codeplug using dzcb API
@@ -78,7 +78,8 @@ Generated codepl ugs will be in `OUTPUT/` subdirectories organized by radio:
 - `OUTPUT/AT-D578UV_III_Plus/anytone/` → Anytone CPS files
 - `OUTPUT/AT-D878UV_II_Plus/anytone/` → Anytone CPS files
 - `OUTPUT/AT-D878UV_II_Plus/dmrconfig/` → dmrconfig .conf file
-- `OUTPUT/OpenGD77/editcp/` → Farnsworth JSON files
+- `OUTPUT/OpenGD77/dmrconfig/` → dmrconfig .conf file
+- `OUTPUT/OpenGD77/gb3gf/` → GB3GF CSV files
 
 ### GitHub Actions
 
@@ -152,10 +153,11 @@ tail -20 OUTPUT/*/dzcb.*.log
 ls OUTPUT/AT-D578UV_III_Plus/anytone/
 ls OUTPUT/AT-D878UV_II_Plus/anytone/
 ls OUTPUT/AT-D878UV_II_Plus/dmrconfig/
-ls OUTPUT/OpenGD77/editcp/
+ls OUTPUT/OpenGD77/dmrconfig/
+ls OUTPUT/OpenGD77/gb3gf/
 ```
 
-Then import into CPS/dmrconfig/editcp to validate.
+Then import into CPS/dmrconfig or GB3GF tool to validate.
 
 ### Manual
 

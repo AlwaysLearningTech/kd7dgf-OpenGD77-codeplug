@@ -24,7 +24,7 @@ CodeplugRecipe(
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
     output_anytone=False,
-    output_dmrconfig=False,
-    output_farnsworth=True,
-    output_gb3gf=False
+    output_dmrconfig=True,
+    output_farnsworth=False,
+    output_gb3gf=True
 ).generate(output / cp_dir.name)

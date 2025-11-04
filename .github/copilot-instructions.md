@@ -37,10 +37,10 @@ kd7dgf-OpenGD77-codeplug/
 │   │   ├── replacements.csv           # Name replacements (regex)
 │   │   ├── scanlists.json             # Custom scanlists
 │   │   └── prox.csv                   # Repeaterbook proximity search (disabled)
-│   └── OpenGD77/                      # OpenGD77 radio - Farnsworth (editcp) output
-│       ├── generate.py                # Python codeplug generator
-│       ├── gd77-default.conf          # dmrconfig template (reference only)
-│       ├── k7abd/                     # Zone/Channel definitions (K7ABD format)
+   └── OpenGD77/                      # OpenGD77 radio - dmrconfig + GB3GF output
+       ├── generate.py                # Python codeplug generator
+       ├── gd77-default.conf          # dmrconfig template
+       ├── k7abd/                     # Zone/Channel definitions (K7ABD format)
 │       ├── exclude.csv                # Channels/zones to exclude
 │       ├── order.csv                  # Channel/zone ordering
 │       ├── replacements.csv           # Name replacements (regex)
@@ -53,7 +53,8 @@ kd7dgf-OpenGD77-codeplug/
 │   │   ├── anytone/                   # Anytone CPS CSV files
 │   │   └── dmrconfig/                 # dmrconfig .conf files
 │   └── OpenGD77/
-│       └── editcp/                    # Farnsworth JSON files
+│       ├── dmrconfig/                 # dmrconfig .conf files
+│       └── gb3gf/                     # GB3GF CSV files (OpenGD77)
 └── tox.ini                             # Test/build configuration
 ```
 
@@ -78,8 +79,8 @@ dzcb.CodeplugRecipe()
   │
   └── Output Formats:
       ├── Anytone CPS (CSV files for Windows CPS software)
-      ├── dmrconfig (OpenRTX format for AT-D878UV)
-      └── Farnsworth/editcp (JSON for editcp tool - OpenGD77)
+      ├── dmrconfig (OpenRTX format for AT-D878UV and OpenGD77)
+      └── GB3GF (CSV format for OpenGD77)
 ```
 
 ### K7ABD Format
@@ -106,7 +107,7 @@ The input CSV files follow the **K7ABD format** (named after the original anyton
 **Customization**: We generate multiple radio variants simultaneously:
 - `input/AT-D578UV_III_Plus/` → Anytone CPS format only
 - `input/AT-D878UV_II_Plus/` → Anytone CPS + dmrconfig formats
-- `input/OpenGD77/` → Farnsworth/editcp format
+- `input/OpenGD77/` → dmrconfig + GB3GF formats
 
 Each `generate.py` in each subdirectory is independently executed by `input/generate_all.py`.
 
@@ -115,7 +116,7 @@ Each `generate.py` in each subdirectory is independently executed by `input/gene
 **Customization**: Different radios output different formats:
 - AT-D578UV: `output_anytone=True`, `output_dmrconfig=False` (not supported upstream)
 - AT-D878UV: `output_anytone=True`, `output_dmrconfig=True` (fully supported)
-- OpenGD77: `output_farnsworth=True`, `output_anytone=False`
+- OpenGD77: `output_dmrconfig=True`, `output_gb3gf=True` (dual-format support)
 
 ### Repeaterbook Proximity (Disabled)
 
@@ -185,7 +186,7 @@ CodeplugRecipe(
     # Output Formats (radio-specific)
     output_anytone=True,                 # Generate Anytone CPS format
     output_dmrconfig=False,              # Generate dmrconfig format (radio-dependent)
-    output_farnsworth=False,             # Generate Farnsworth/editcp JSON
+    output_farnsworth=False,             # NOT used (deprecated - was Farnsworth/editcp)
     output_gb3gf=False                   # Generate GB3GF format
 ).generate(output / cp_dir.name)
 ```
@@ -344,7 +345,7 @@ python3 input/generate_all.py
 # Verify output files
 ls -lh OUTPUT/*/anytone/
 ls -lh OUTPUT/*/dmrconfig/
-ls -lh OUTPUT/*/editcp/
+ls -lh OUTPUT/OpenGD77/gb3gf/
 ```
 
 ### GitHub Actions Validation
@@ -362,7 +363,7 @@ Before using generated files:
 
 1. **Anytone CPS**: Import CSV files through official CPS software
 2. **dmrconfig**: Load .conf file and validate radio settings
-3. **editcp**: Open JSON and verify zones/channels in GUI
+3. **GB3GF**: Import CSV file into GB3GF tool and verify zones/channels
 
 ## Upstream Methodology
 
