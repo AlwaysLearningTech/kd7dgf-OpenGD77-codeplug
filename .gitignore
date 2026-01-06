@@ -1,5 +1,5 @@
-.pyc
-.tox
+*.pyc
+.tox/
 .DS_Store
-OUTPUT
+OUTPUT/
 __pycache__/
