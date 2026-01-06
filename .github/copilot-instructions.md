@@ -1,4 +1,4 @@
-# Copilot Instructions for kd7dgf-OpenGD77-codeplug
+# Copilot Instructions for kd7dgf-codeplug
 
 ## Project Overview
 
@@ -12,49 +12,39 @@ This is a **multi-radio DMR codeplug generator** based on the upstream [dzcb](ht
 ## Project Architecture
 
 ```
-kd7dgf-OpenGD77-codeplug/
+kd7dgf-codeplug/
 ├── README.md                           # Main documentation
 ├── .github/
 │   ├── copilot-instructions.md        # This file
 │   └── workflows/
 │       └── codeplugs.yml              # GitHub Actions build workflow
 ├── input/                              # Radio variant subdirectories
-│   ├── AT-D578UV_III_Plus/            # Anytone 578 (CPS 1.11) - Anytone output only
-│   │   ├── generate.py                # Python codeplug generator
-│   │   ├── d578uv-default.conf        # CPS template (for reference)
-│   │   ├── k7abd/                     # Zone/Channel definitions (K7ABD format)
-│   │   ├── exclude.csv                # Channels/zones to exclude
-│   │   ├── order.csv                  # Channel/zone ordering
-│   │   ├── replacements.csv           # Name replacements (regex)
-│   │   ├── scanlists.json             # Custom scanlists
-│   │   └── prox.csv                   # Repeaterbook proximity zones
-│   ├── AT-D878UV_II_Plus/             # Anytone 878 (CPS 1.21) - Anytone + dmrconfig
+│   ├── Anytone/                       # Unified Anytone config (578/878/890)
 │   │   ├── generate.py                # Python codeplug generator
 │   │   ├── d878uv-default.conf        # dmrconfig template
+│   │   ├── example-md-uv380.json      # Example JSON config format
 │   │   ├── k7abd/                     # Zone/Channel definitions (K7ABD format)
 │   │   ├── exclude.csv                # Channels/zones to exclude
 │   │   ├── order.csv                  # Channel/zone ordering
 │   │   ├── replacements.csv           # Name replacements (regex)
 │   │   ├── scanlists.json             # Custom scanlists
 │   │   └── prox.csv                   # Repeaterbook proximity zones
-   └── OpenGD77/                      # OpenGD77 radio - dmrconfig + GB3GF output
-       ├── generate.py                # Python codeplug generator
-       ├── gd77-default.conf          # dmrconfig template
-       ├── k7abd/                     # Zone/Channel definitions (K7ABD format)
+│   └── OpenGD77/                      # OpenGD77 radio - dmrconfig + GB3GF output
+│       ├── generate.py                # Python codeplug generator
+│       ├── gd77-default.conf          # dmrconfig template
+│       ├── example-md-uv380.json      # Example JSON config format
+│       ├── k7abd/                     # Zone/Channel definitions (K7ABD format)
 │       ├── exclude.csv                # Channels/zones to exclude
 │       ├── order.csv                  # Channel/zone ordering
 │       ├── replacements.csv           # Name replacements (regex)
 │       ├── scanlists.json             # Custom scanlists
 │       └── prox.csv                   # Repeaterbook proximity zones
 ├── OUTPUT/                             # Build output (generated)
-│   ├── AT-D578UV_III_Plus/
-│   │   └── anytone/                   # Anytone CPS CSV files
-│   ├── AT-D878UV_II_Plus/
-│   │   ├── anytone/                   # Anytone CPS CSV files
-│   │   └── dmrconfig/                 # dmrconfig .conf files
+│   ├── Anytone/                       # Anytone CPS CSV files (for 578/878/890)
+│   │   └── anytone/                   # CPS-compatible CSV format
 │   └── OpenGD77/
 │       ├── dmrconfig/                 # dmrconfig .conf files
-│       └── gb3gf/                     # GB3GF CSV files (OpenGD77)
+│       └── gb3gf/                     # GB3GF CSV files
 └── tox.ini                             # Test/build configuration
 ```
 
@@ -105,8 +95,7 @@ The input CSV files follow the **K7ABD format** (named after the original anyton
 **Upstream**: example-codeplug uses a single `default/` directory for one codeplug variant.
 
 **Customization**: We generate multiple radio variants simultaneously:
-- `input/AT-D578UV_III_Plus/` → Anytone CPS format only
-- `input/AT-D878UV_II_Plus/` → Anytone CPS + dmrconfig formats
+- `input/Anytone/` → Single unified config for Anytone 578/878/890 (CPS format)
 - `input/OpenGD77/` → dmrconfig + GB3GF formats
 
 Each `generate.py` in each subdirectory is independently executed by `input/generate_all.py`.
@@ -114,8 +103,7 @@ Each `generate.py` in each subdirectory is independently executed by `input/gene
 ### Output Format Selection
 
 **Customization**: Different radios output different formats:
-- AT-D578UV: `output_anytone=True`, `output_dmrconfig=False` (not supported upstream)
-- AT-D878UV: `output_anytone=True`, `output_dmrconfig=True` (fully supported)
+- Anytone (578/878/890): `output_anytone=True`, `output_dmrconfig=False` (CPS format)
 - OpenGD77: `output_dmrconfig=True`, `output_gb3gf=True` (dual-format support)
 
 ## Development Workflow
@@ -133,7 +121,7 @@ tox
 python3 input/generate_all.py
 ```
 
-**Output**: `OUTPUT/{AT-D578UV_III_Plus,AT-D878UV_II_Plus,OpenGD77}/`
+- **Output**: `OUTPUT/{Anytone,OpenGD77}/`
 
 ### GitHub Actions
 
@@ -145,26 +133,29 @@ python3 input/generate_all.py
 ### Adding a New Radio Variant
 
 1. Create `input/NewRadio/` directory
-2. Copy configuration files from an existing variant
+2. Copy configuration files from an existing variant (Anytone or OpenGD77)
 3. Create `input/NewRadio/generate.py` with appropriate `CodeplugRecipe()` parameters
 4. Add radio-specific k7abd CSV files to `input/NewRadio/k7abd/`
-5. Update README.md to document the new variant
+5. Customize output formats by setting `output_anytone`, `output_dmrconfig`, `output_gb3gf` as needed
+6. Update README.md to document the new variant
+7. Test locally: `python3 input/NewRadio/generate.py`
 
 ## Configuration File Reference
 
 ### generate.py (CodeplugRecipe Parameters)
 
+**Anytone** (generates Anytone CPS + dmrconfig + GB3GF for future export):
 ```python
 CodeplugRecipe(
     # Data Sources (live or local)
     source_pnwdigital=True,              # Include live PNWDigital repeaters
     source_seattledmr=True,              # Include live SeattleDMR repeaters
     source_default_k7abd=False,          # Include dzcb default simplex/unlicensed
-    source_k7abd=[(cp_dir / "k7abd")],   # Local K7ABD CSV files
+    source_k7abd=[(cp_dir / "k7abd")],   # Local K7ABD CSV files (as list)
     source_repeaterbook_proximity=cp_dir / "prox.csv",  # Repeaterbook proximity zones
     
-    # Repeaterbook Configuration (if customizing)
-    repeaterbook_states=["washington", "oregon"],
+    # Repeaterbook Configuration
+    repeaterbook_states=["washington", "oregon", "idaho"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     
     # Customization Files
@@ -173,11 +164,35 @@ CodeplugRecipe(
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
     
-    # Output Formats (radio-specific)
-    output_anytone=True,                 # Generate Anytone CPS format
-    output_dmrconfig=False,              # Generate dmrconfig format (radio-dependent)
-    output_farnsworth=False,             # Legacy parameter (not used, always False)
-    output_gb3gf=False                   # Generate GB3GF format
+    # Output Formats (unified Anytone outputs all for multi-radio export)
+    output_anytone=True,                 # Anytone CPS format
+    output_dmrconfig=True,               # dmrconfig format (for 878 export)
+    output_farnsworth=False,             # Legacy parameter (not used)
+    output_gb3gf=True                    # GB3GF format (future OpenGD77 CSV)
+).generate(output / cp_dir.name)
+```
+
+**OpenGD77** (generates dmrconfig + GB3GF):
+```python
+CodeplugRecipe(
+    source_pnwdigital=True,
+    source_seattledmr=True,
+    source_default_k7abd=False,
+    source_k7abd=cp_dir / "k7abd",       # Single path (not a list)
+    source_repeaterbook_proximity=cp_dir / "prox.csv",
+    
+    repeaterbook_states=["washington", "oregon"],
+    repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
+    
+    scanlists_json=cp_dir / "scanlists.json",
+    exclude=cp_dir / "exclude.csv",
+    order=cp_dir / "order.csv",
+    replacements=cp_dir / "replacements.csv",
+    
+    output_anytone=False,                # Not for OpenGD77
+    output_dmrconfig=True,               # Primary output format
+    output_farnsworth=False,
+    output_gb3gf=True                    # Secondary output format
 ).generate(output / cp_dir.name)
 ```
 
@@ -253,7 +268,24 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 
 ## Known Issues and Limitations
 
-### 1. Repeaterbook Proximity (Re-enabled)
+### 1. Project Structure Consolidation
+
+**Status**: ✅ Completed
+
+**Change**: Three separate radio variant directories (`AT-D578UV_III_Plus`, `AT-D878UV_II_Plus`) consolidated into single `input/Anytone/` directory that generates unified codeplug.
+
+**Rationale**: All three Anytone radios (578, 878, 890) share the same input configuration. Export to format-specific files (CPS, dmrconfig, GB3GF) is handled by output parameters, not separate directories.
+
+**Output Structure**:
+- `OUTPUT/Anytone/` - Unified Anytone configuration output
+  - `anytone/` - CPS format (importable to Windows CPS software)
+  - `dmrconfig/` - dmrconfig format (Linux/Mac, for 878UV export)
+  - `gb3gf/` - GB3GF format (future OpenGD77 CSV export)
+- `OUTPUT/OpenGD77/` - OpenGD77 specific configuration
+  - `dmrconfig/` - Primary output (fully supported)
+  - `gb3gf/` - Secondary output (format issues - see #4 below)
+
+### 2. Repeaterbook Proximity (Re-enabled)
 
 **Status**: ✅ Fixed and re-enabled
 
@@ -263,7 +295,9 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 
 **Fix Applied**: Removed UTF-8 BOM from all K7ABD CSV files. Repeaterbook proximity is now re-enabled with proximity points defined in `prox.csv` for Seattle and Tacoma areas.
 
-**Current Configuration**: All three radios include repeaterbook data from Washington and Oregon within 50-mile radius of defined proximity points.
+**Current Configuration**: 
+- Anytone: Washington, Oregon, Idaho (expanded for broader coverage)
+- OpenGD77: Washington, Oregon (conservative coverage)
 
 ### 3. AT-D578UV dmrconfig Not Supported
 
@@ -271,29 +305,29 @@ Analog__Ham_Simplex_Channels.csv: Zone="Ham Simplex", Channel="Ch 01"
 
 **Issue**: dmrconfig doesn't recognize Anytone AT-D578UV model
 
-**Workaround**: Generates Anytone CPS format only (still functional)
+**Current Approach**: Unified Anytone directory generates CPS format for 578 import. dmrconfig output available but cannot be loaded on 578 hardware.
+
+**Workaround**: Users importing 578 codeplug must use Anytone CPS software (Windows)
 
 **Resolution Path**: 
 - File issue with OpenRTX/dmrconfig if AT-D578UV support is needed
-- Until then, users must import via Anytone CPS software (Windows)
+- Alternative: Use dmrconfig for AT-D878UV/D890
 
 ### 4. OpenGD77 GB3GF CSV Format Incompatibility
 
-**Status**: ⚠️ Format mismatch
+**Status**: ⚠️ Format mismatch (experimental)
 
-**Issue**: OpenGD77 now has native CSV import support, but the current dzcb GB3GF output format doesn't match OpenGD77's import requirements. Additionally, GPS coordinate support is incomplete.
+**Issue**: dzcb GB3GF output format doesn't match OpenGD77's CSV import requirements. GPS coordinate support incomplete.
 
 **Symptoms**: GB3GF CSV files cannot be imported into OpenGD77 CPS. Missing or incorrect field formats.
 
+**Current Output**: GB3GF files generated but marked as experimental.
+
 **Workarounds**: 
-1. Use dmrconfig output for OpenGD77 (Linux/Mac) - fully functional and recommended
-2. Copy/paste rows from GB3GF CSV files directly into OpenGD77 CPS as a temporary workaround
+1. **Primary (recommended)**: Use dmrconfig output for OpenGD77 (Linux/Mac) - fully functional
+2. **Fallback**: Manual CSV editing or copy/paste rows into OpenGD77 CPS
 
-### 5. GitHub Actions Cache Key
-
-**Current**: `dzcb-cache-YYYYMMDD-A` (UTC-8 offset, updated daily)
-
-**Note**: Cache is automatically invalidated each day; key format uses `YYYYMMDD-A` where A is a literal character
+**Future Work**: Monitor upstream dzcb for GB3GF format improvements
 
 ## Common Workflow Tasks
 
@@ -343,19 +377,22 @@ channel_pattern,channel_repl
 python3 input/generate_all.py
 
 # Verify output files
-ls -lh OUTPUT/*/anytone/
-ls -lh OUTPUT/*/dmrconfig/
+ls -lh OUTPUT/Anytone/anytone/
+ls -lh OUTPUT/Anytone/dmrconfig/
+ls -lh OUTPUT/Anytone/gb3gf/
+ls -lh OUTPUT/OpenGD77/dmrconfig/
 ls -lh OUTPUT/OpenGD77/gb3gf/
 ```
 
 ### GitHub Actions Validation
 
-Check workflow runs: https://github.com/AlwaysLearningTech/kd7dgf-OpenGD77-codeplug/actions
+Check workflow runs: https://github.com/AlwaysLearningTech/kd7dgf-codeplug/actions
 
 **Success indicators**:
-- ✅ All three `generate.py` files complete without errors
-- ✅ Output artifacts created for each radio variant
+- ✅ Both `generate.py` files (Anytone and OpenGD77) complete without errors
+- ✅ Output artifacts created in OUTPUT/Anytone/ and OUTPUT/OpenGD77/
 - ✅ No `KeyError: 'Zone'` or encoding-related errors
+- ✅ Log files generated for each run
 
 ### CPS Import Testing
 
@@ -438,20 +475,28 @@ Update only after testing locally and on GitHub Actions. Check release notes at 
 
 | File | Purpose | Radio(s) |
 |------|---------|----------|
-| `input/*/generate.py` | Codeplug generation script | All |
-| `input/*/k7abd/*.csv` | Zone/channel definitions | All |
+| `input/Anytone/generate.py` | Codeplug generation script | Anytone 578/878/890 |
+| `input/OpenGD77/generate.py` | Codeplug generation script | OpenGD77 |
+| `input/generate_all.py` | Master build script | All |
+| `input/Anytone/k7abd/*.csv` | Zone/channel definitions | Anytone 578/878/890 |
+| `input/OpenGD77/k7abd/*.csv` | Zone/channel definitions | OpenGD77 |
 | `input/*/exclude.csv` | Channel/zone filters | All |
 | `input/*/order.csv` | Channel/zone ordering | All |
 | `input/*/replacements.csv` | Name replacements (regex) | All |
 | `input/*/scanlists.json` | Custom scanlists | All |
-| `input/AT-D878UV_II_Plus/d878uv-default.conf` | dmrconfig template | 878 only |
+| `input/Anytone/d878uv-default.conf` | dmrconfig template | Anytone |
+| `input/OpenGD77/gd77-default.conf` | dmrconfig template | OpenGD77 |
 | `.github/workflows/codeplugs.yml` | GitHub Actions build | All |
 
 ## Quick Reference Commands
 
 ```bash
-# Local build
+# Local build (both Anytone and OpenGD77)
 python3 input/generate_all.py
+
+# Build specific radio
+python3 input/Anytone/generate.py
+python3 input/OpenGD77/generate.py
 
 # Verify CSV encoding (no BOM)
 file input/*/k7abd/*.csv
@@ -462,9 +507,8 @@ find input -name "*.csv" -exec file {} \; | grep -v UTF-8
 # Check git status before push
 git status
 
-# View GitHub Actions
-git log --oneline | head -5
-```
+# View recent commits
+git log --oneline | head -10
 
 ## When to Update Documentation
 
