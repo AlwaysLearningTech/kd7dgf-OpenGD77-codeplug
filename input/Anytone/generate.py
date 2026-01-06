@@ -17,14 +17,14 @@ CodeplugRecipe(
     source_default_k7abd=False,
     source_k7abd=[(cp_dir / "k7abd")],
     source_repeaterbook_proximity=cp_dir / "prox.csv",
-    repeaterbook_states=["washington", "oregon"],
+    repeaterbook_states=["washington", "oregon", "idaho"],
     repeaterbook_name_format='{Callsign} {Nearest City} {Landmark}',
     scanlists_json=cp_dir / "scanlists.json",
     exclude=cp_dir / "exclude.csv",
     order=cp_dir / "order.csv",
     replacements=cp_dir / "replacements.csv",
     output_anytone=True,
-    output_dmrconfig=False,  # AT-D578UV not supported by dmrconfig upstream
+    output_dmrconfig=True,
     output_farnsworth=False,
-    output_gb3gf=False
+    output_gb3gf=True
 ).generate(output / cp_dir.name)
