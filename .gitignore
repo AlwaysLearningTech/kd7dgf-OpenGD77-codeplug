@@ -2,4 +2,4 @@
 .tox
 .DS_Store
 OUTPUT
-__pycache__
+__pycache__/
