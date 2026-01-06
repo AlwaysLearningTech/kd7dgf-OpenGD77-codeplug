@@ -2,3 +2,4 @@
 .tox
 .DS_Store
 OUTPUT
+__pycache__
