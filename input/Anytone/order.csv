@@ -1,9 +1,9 @@
 zones,contacts,channels
 ACS - UHF,,
 ACS - VHF,,
-ACS - VHF 1.25m,,
+ACS - 1.25m,,
 ACS - Data,,
-ACS - Narrow Band,,
+ACS - Narrow,,
 ACS - GMRS,,H3-CAPH
 GMRS / FRS,,
 Seattle/PNWDigital,,
@@ -11,6 +11,9 @@ Seattle/Central,,Seattle 1 SCE
 Seattle/North,,Seattle 1 LFP
 Seattle/West,,Seattle 1 SWE
 Seattle/East,,
+GMRS WA RPTR,,
+GMRS ID RPTR,,
+GMRS OR RPTR,,
 Buck Mt.,,
 SeattleDMR 0,,
 Bellevu/Cougar,,
